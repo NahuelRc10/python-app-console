@@ -1,0 +1,193 @@
+from data.rol_repository import RolRepository as rolRepository
+from models.rol import Rol
+from data.usuario_repository import UsuarioRepository as usuarioRepository
+from models.usuario import Usuario
+from models.proyecto import Proyecto
+from data.proyecto_repository import ProyectoRepository as proyectoRepository
+from data.usuario_proyecto_repository import UsuarioProyectoRepository as usuarioProyectoRepository
+from models.usuario_proyecto import UsuarioProyecto
+from data.sprint_repository import SprintRepository as sprintRepository
+from models.sprint import Sprint
+import datetime
+from data.requerimiento_repository import RequerimientoRepository as reqRepository
+from models.requerimiento import Requerimiento
+
+#roles = rolRepository.findAll()
+#print(roles)
+
+#rol = Rol(None, 'DEVELOPER')
+#print(rolRepository.save(rol))
+
+#rol = Rol(6, 'DEVELOPER')
+#print(rolRepository.update(rol))
+
+#print(rolRepository.findById(6))
+
+'''
+usuarios = usuarioRepository.findAll()
+for usuario in usuarios:
+    print(usuario.__str__())
+'''
+'''
+id = 1
+usuario = usuarioRepository.findById(id)
+print(usuario.__str__())
+'''
+'''
+rol = rolRepository.findById(6)
+usuario = Usuario(None, 'Juan', 'Perez', 'M', 'juan@gmail.com', '123456', '1555003', rol)
+print(usuarioRepository.save(usuario))
+'''
+
+#print(usuarioRepository.delete(2))
+'''
+rol = rolRepository.findById(1)
+usuario = Usuario(4, 'Juan', 'Perez', 'M', 'juan@gmail.com', '123456', '1555003', rol)
+print(usuarioRepository.update(usuario))
+'''
+
+'''
+proyectos = proyectoRepository.findAll()
+for p in proyectos:
+    print(p.__str__())
+'''
+
+'''
+proyecto = proyectoRepository.findById(1)
+print(proyecto.__str__())
+'''
+
+'''
+miembros = []
+usuario = usuarioRepository.findById(4)
+proyecto = Proyecto(None, "Test_Proyecto", "Descripcion de test", 1, 150.0, 25.0, usuario, miembros)
+print(proyectoRepository.save(proyecto))
+'''
+
+'''
+proyecto = proyectoRepository.findById(2)
+proyecto.set_cantidad_integrantes(1)
+print(proyectoRepository.update(proyecto))
+'''
+
+'''
+# PRUEBA DEL LOGIN
+usuario = usuarioRepository.findByEmailAndPassword("juan@gmail.com", '123456')
+if usuario is not None:
+    print("login correcto")
+    print(usuario.__str__())
+else:
+    print("login incorrecto")
+'''
+
+
+# PRUEBAS DEL REPOSITORY DE USUARIOPROYECTO
+'''
+usuarios_proyectos = usuarioProyectoRepository.findAll()
+for up in usuarios_proyectos:
+    print(up.__str__())
+'''
+
+'''
+usuarios_proyectos = usuarioProyectoRepository.findByIdProyecto(1)
+for up in usuarios_proyectos:
+    print(up.__str__())
+'''
+
+'''
+usuario = usuarioRepository.findById(6)
+proyecto = proyectoRepository.findById(2)
+up = UsuarioProyecto(None, usuario, proyecto)
+print(usuarioProyectoRepository.save(up))
+'''
+
+# FINDALL SPRINTREPO
+'''
+sprints = sprintRepository.findByIdProyecto(1)
+for s in sprints:
+    print(s.__str__())
+'''
+
+'''
+sprints = sprintRepository.findByEstado(False)
+for s in sprints:
+    print(s.__str__())
+'''
+
+# Validacion antes de abrir un nuevo sprint
+'''
+existe = sprintRepository.existSprintActivo(1)
+print(existe)
+
+existe = sprintRepository.existSprintActivo(2)
+print(existe)
+'''
+
+'''
+# primero validamos que no haya ningun sprint abierto
+existe = sprintRepository.existSprintActivo(2)
+if existe is not True:
+    proyecto = proyectoRepository.findById(2)
+    fecha_inicio = datetime.datetime.now()
+    fecha_fin = fecha_inicio + datetime.timedelta(days=15)
+    sprint = Sprint(None, 'sprint-pr1', fecha_inicio, fecha_fin, 'testing', 0, proyecto)
+    print(sprintRepository.save(sprint))
+'''
+
+'''
+#UPDATE
+sprint = sprintRepository.findById(4)
+sprint.set_estado(True)
+print(sprintRepository.update(sprint))
+print(sprintRepository.existSprintActivo(2))
+'''
+
+'''
+usuario = usuarioRepository.findById(6)
+proyecto = proyectoRepository.findById(1)
+sprint = sprintRepository.findById(3)
+
+req = Requerimiento(None, 'Conexion a base de datos', None, None, None, 'Realizar conexion a db', None, sprint, usuario, proyecto)
+print(reqRepository.save(req))
+'''
+
+'''
+reqs = reqRepository.findAll()
+for req in reqs:
+    print(req.__str__())
+'''
+
+'''
+print(reqRepository.findById(1))
+req = reqRepository.findById(2)
+if req is not None:
+    print(req.__str__())
+else:
+    print("No existe el req")
+'''
+
+'''
+reqs = reqRepository.findByIdProyecto(1)
+for req in reqs:
+    print(req.__str__())
+
+reqs = reqRepository.findByIdUsuario(6)
+for req in reqs:
+    print(req.__str__())
+'''
+
+'''
+reqs = reqRepository.findByUsuarioAndProyecto(6, 1)
+for req in reqs:
+    print(req.__str__())
+'''
+
+'''
+usuario = usuarioRepository.findById(6)
+proyecto = proyectoRepository.findById(1)
+sprint = sprintRepository.findById(3)
+
+fecha_inicio = datetime.datetime.now()
+req = Requerimiento(2, 'Conexion a base de datos', 2, fecha_inicio, None, 'Realizar conexion a db', 'Se calcula 2 horas de trabajo', sprint, usuario, proyecto)
+print(reqRepository.update(req))
+'''
