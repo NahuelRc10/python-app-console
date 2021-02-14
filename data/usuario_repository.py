@@ -56,6 +56,7 @@ def findUsuarioAvailableByIdProyecto(id_proyecto):
             cursor.execute(select_query, (id_proyecto,))
             usuarios, registros = [], cursor.fetchall()
             [usuarios.append(buildUsuario(registro)) for registro in registros]
+            return usuarios
     except (Exception, Error) as error:
         print("Error while getting data", error)
 

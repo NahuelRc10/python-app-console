@@ -243,11 +243,11 @@ def editar_proyecto():
     if proyecto_seleccionado is not None:
         cant_horas = precio_x_hora = 0
         descripcion = input("\t- Ingresa la descripcion del proyecto: ")
-        cant_horas = valid_input_number("- Ingresa la cantidad de horas estimadas del proyecto: ", "Este campo no puede contener letras")
-        precio_x_hora = valid_input_float("- Ingresa el precio por hora: ", "Precio no valido")
+        cant_horas = int(get_validated_imput("- Ingresa la cantidad de horas estimadas del proyecto: ", "Este campo no puede contener letras", [str.isdigit]))
+        precio_x_hora = float(get_validated_imput("- Ingresa el precio por hora: ", "Precio no valido", [valid_input_float]))
 
         total_precio = proyecto_seleccionado.total_precio + cant_horas * precio_x_hora
-        proyecto_seleccionado.total_horas = proyecto_seleccionado.total_horas() + cant_horas
+        proyecto_seleccionado.total_horas = proyecto_seleccionado.total_horas + cant_horas
         proyecto_seleccionado.total_precio = total_precio
         proyecto_seleccionado.descripcion = descripcion
         actualiza = actualizarProyecto(proyecto_seleccionado)
@@ -261,8 +261,8 @@ def asignar_usuario():
         while flag_asignar is True:
             print("\t Selecciona los usuarios")
             usuarios_av = getUsuariosDisponiblesParaProyecto(proyecto_seleccionado.id)
-            [print("\t" + str(i) + usuarios_av[i].__repr__) for i in range(0, len(usuarios_av))]
             if len(usuarios_av) > 0:
+                [print("\t" + str(i) + usuarios_av[i].nombre + ", " + usuarios_av[i].apellido + " - ROL: " + usuarios_av[i].rol.nombre_rol) for i in range(0, len(usuarios_av))]
                 opt = valid_opt_between_ranges(0, len(usuarios_av))
                 usuario_seleccionado = usuarios_av[opt]
                 usuario_proyecto = UsuarioProyecto(None, usuario_seleccionado, proyecto_seleccionado)
