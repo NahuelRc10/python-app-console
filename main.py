@@ -1,6 +1,6 @@
 import datetime
 from models.models import Usuario, Proyecto, UsuarioProyecto, Sprint, Requerimiento
-from utils.validators import valida_email, valida_input_date, valida_input_date_hasta
+from utils.validators import valida_email, valida_input_date, valida_input_date_hasta, valid_input_float
 from utils.exceptions.custom_exceptions import AccessDeniedException, AppException
 from logic.usuario_controller import getUsuarioByEmailAndPassword, findAllRoles, registrarNuevoUsuario, getUsuariosDisponiblesParaProyecto, asignarUsuarioProyecto, getUsuariosByProyecto
 from logic.proyecto_controller import registrarNuevoProyecto, listarProyectosByModo, actualizarProyecto, listarProyectosByUsuario
