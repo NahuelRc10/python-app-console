@@ -26,7 +26,7 @@ def generar_reporte_sprints(tipo_generacion, filtros):
         registros = cursor.fetchall()
         connection.close()
         # Asignamos el nombre del archivo
-        reporte_file_name = "reporte_print_" + str(datetime.datetime.now()) + ".txt"
+        reporte_file_name = "reporte.txt"
         file = open('files/' + reporte_file_name, 'a')
 
         # Armamos la cabecera

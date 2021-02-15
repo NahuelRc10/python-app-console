@@ -6,8 +6,8 @@ from email.mime.base import MIMEBase
 from email import encoders
 
 def enviar_email(email, asunto, contenido="", archivo=None):
-    usuario = ""
-    clave = ""
+    usuario = ""        # Estos datos se extraen de variables de entorno del sistema operativo con la libreria os
+    clave = ""          # import os
 
     mime = MIMEMultipart()
 
