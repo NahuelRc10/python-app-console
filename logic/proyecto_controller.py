@@ -1,4 +1,4 @@
-from data.proyecto_repository import save, findByIdUsuario, findByIdUsuarioAndLikeNombre, update, existsByNombre
+from data.proyecto_repository import save, findByIdLider, findByIdLiderAndLikeNombre, update, existsByNombre, findByIdUsuario, findByIdUsuarioAndLikeNombre
 from utils.exceptions.custom_exceptions import AppException
 
 def registrarNuevoProyecto(proyecto):
@@ -6,10 +6,10 @@ def registrarNuevoProyecto(proyecto):
     return save(proyecto)
 
 def listarProyectosByModo(modo, usuario, nombre):
-    if modo == 1:
-        proyectos = findByIdUsuario(usuario.id)   # Por lider
+    if usuario.rol.nombre_rol == 'ADMIN':
+        proyectos = findByIdLider(usuario.id) if modo == 1 else findByIdLiderAndLikeNombre(nombre, usuario.id)
     else:
-        proyectos = findByIdUsuarioAndLikeNombre(nombre, usuario.id)      # Por nombre y id_lider
+        proyectos = findByIdUsuario(usuario.id) if modo == 1 else findByIdUsuarioAndLikeNombre(nombre, usuario.id)
     return proyectos
 
 def actualizarProyecto(proyecto):

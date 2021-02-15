@@ -1,6 +1,6 @@
 import datetime
 from models.models import Usuario, Proyecto, UsuarioProyecto, Sprint, Requerimiento
-from utils.validators import valida_email, valid_input_string, valid_input_number, valid_input_float, valid_opt_between_ranges, valida_input_date, valida_input_date_hasta
+from utils.validators import valida_email, valida_input_date, valida_input_date_hasta
 from utils.exceptions.custom_exceptions import AccessDeniedException, AppException
 from logic.usuario_controller import getUsuarioByEmailAndPassword, findAllRoles, registrarNuevoUsuario, getUsuariosDisponiblesParaProyecto, asignarUsuarioProyecto, getUsuariosByProyecto
 from logic.proyecto_controller import registrarNuevoProyecto, listarProyectosByModo, actualizarProyecto, listarProyectosByUsuario
@@ -69,10 +69,7 @@ def show_menu_admin():
             print("\t7- Asignar requerimiento")
             print("\t8- Listar requerimientos")
             print("\t0- Volver")
-            flag = False
-            while flag is False:
-                option_proy = int(input("\t- Ingresa una opcion del menu de Proyectos: "))
-                flag = True if option_proy >= 0 & option_proy < 6 else False
+            option_proy = valid_opt_between_ranges(0,8)
             exec_option_menu_proyecto(option_proy)
         elif option == 3:
             ejecutar_reporte()
@@ -167,6 +164,21 @@ def get_validated_input_float(mensaje1, error_message):
             break
     return valor
 
+def valid_opt_between_ranges(limit1, limit2):
+    input_number = 0
+    while True:
+        try:
+            input_number = int(input("\t- Ingrese una opcion: "))
+        except ValueError:
+            print("\t" + "No esta permitido ingresar letras")
+            continue
+        if limit1 <= input_number <= limit2:
+            break
+        else:
+            print("\t Debes ingresar una opcion valida. Los limites son " + str(limit1) + ", " + str(limit2))
+            continue
+    return input_number
+
 def carga_datos_usuario():
     print("\t FORMULARIO REGISTRO USUARIO")
     usuario = Usuario(None, None, None, None, None, None, None, None)
@@ -182,7 +194,7 @@ def carga_datos_usuario():
 
     # Al momento del registro se establece una contraseña por default, el usuario despues podra modificar dicha contraseña
     password = PASSWORD_DEFAULT
-    telefono = valid_input_number("- Ingresa telefono del usuario: ", "Este campo no puede contener letras")
+    telefono = int(get_validated_imput("- Ingresa telefono del usuario: ", "Este campo no puede contener letras", [str.isdigit]))
 
     # Listamos los roles
     roles_list = findAllRoles()
@@ -292,7 +304,7 @@ def carga_datos_sprint(proyecto = None):
         print("\t FORMULARIO NUEVO SPRINT")
         nombre = input("\t- Ingresa el nombre del sprint: ")
         fecha_inicio = datetime.datetime.now()
-        cant_dias_sprint = valid_input_number("- Ingresa la cantidad de dias que dura el sprint: ", "Este campo no puede contener letras")
+        cant_dias_sprint = int(get_validated_imput("- Ingresa la cantidad de dias que dura el sprint: ", "Este campo no puede contener letras", [str.isdigit]))
         fecha_fin = fecha_inicio + datetime.timedelta(days=cant_dias_sprint)
         observaciones = input("\t- Ingresa observaciones: ")
 
@@ -335,7 +347,7 @@ def cargar_datos_requerimiento():
     if sprint_activo is not None:
         print("\t FORMULARIO ALTA REQUERIMIENTO")
         nombre = input("\t- Ingresa el nombre del requerimiento: ")
-        cant_horas= valid_input_number("- Ingresa la cantidad de horas estimadas del requerimiento: ", "Este campo no puede contener letras")
+        cant_horas= int(get_validated_imput("- Ingresa la cantidad de horas estimadas del requerimiento: ", "Este campo no puede contener letras", [str.isdigit]))
         descripcion = input("\t- Ingresa descripcion del requerimiento: ")
         observacion = input("\t- Ingresa observacion del requerimietno: ")
 

@@ -4,7 +4,9 @@ def get_connection(connector=mysql.connector):
     return connector.connect(host='localhost',
                              database='adminproyectos',
                              user='root',
-                             password='root')
+                             password='root',
+                             autocommit=True)
+
 
 '''
 def read_database_version():

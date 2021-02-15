@@ -33,42 +33,12 @@ def valid_input_string(mensaje1, mensaje2):
         break
     return cadena
 
-def valid_input_number(mensaje1, mensaje2):
-    input_number = 0
-    while True:
-        try:
-            input_number = int(input("\t" + mensaje1))
-        except ValueError:
-            print("\t" + mensaje2)
-            continue
-        if input_number < 0:
-            print("\t Debes ingresar un numero positivo")
-            continue
-        else:
-            break
-    return input_number
-
 def valid_input_float(n):
     try:
         n = float(n)
         return True
     except ValueError:
         return False
-
-def valid_opt_between_ranges(limit1, limit2):
-    input_number = 0
-    while True:
-        try:
-            input_number = int(input("\t- Ingrese una opcion: "))
-        except ValueError:
-            print("\t" + "No esta permitido ingresar letras")
-            continue
-        if limit1 <= input_number <= limit2:
-            break
-        else:
-            print("\t Debes ingresar una opcion valida. Los limites son " + str(limit1) + ", " + str(limit2))
-            continue
-    return input_number
 
 def valida_input_date(mensaje):
     fecha = ""

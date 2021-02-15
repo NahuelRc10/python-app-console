@@ -23,15 +23,40 @@ def findAll():
     except (Exception, Error) as error:
         print("Error while getting data", error)
 
+def findByIdLider(id_usuario):
+    try:
+        with closing(get_connection()) as connection:
+            cursor = connection.cursor()
+            select_query = '''select pro.* from proyectos pro where pro.id_lider = %s '''
+            cursor.execute(select_query, (id_usuario, ))
+            proyectos, registros = [], cursor.fetchall()
+        [proyectos.append(buildProyecto(registro)) for registro in registros]
+        return proyectos
+    except (Exception, Error) as error:
+        print("Error while getting data", error)
+
+def findByIdLiderAndLikeNombre(nombre, id_usuario):
+    try:
+        with closing(get_connection()) as connection:
+            cursor = connection.cursor()
+            param = '{}%'.format(nombre)
+            select_query = '''select pro.* from proyectos pro where pro.nombre like %s and pro.id_lider = %s '''
+            cursor.execute(select_query, (param, id_usuario))
+            proyectos, registros = [], cursor.fetchall()
+        [proyectos.append(buildProyecto(registro)) for registro in registros]
+        return proyectos
+    except (Exception, Error) as error:
+        print("Error while getting data", error)
+
 def findByIdUsuario(id_usuario):
     try:
         with closing(get_connection()) as connection:
             cursor = connection.cursor()
-            select_query = '''select pro.* 
+            select_query = '''select distinct pro.* 
                               from proyectos pro
                               inner join usuarios_proyectos up on up.id_proyecto = pro.id
-                              where up.id_usuario = %s '''
-            cursor.execute(select_query, (id_usuario,))
+                              where pro.id_lider = 11 '''
+            cursor.execute(select_query, (id_usuario))
             proyectos, registros = [], cursor.fetchall()
         [proyectos.append(buildProyecto(registro)) for registro in registros]
         return proyectos
@@ -43,10 +68,10 @@ def findByIdUsuarioAndLikeNombre(nombre, id_usuario):
         with closing(get_connection()) as connection:
             cursor = connection.cursor()
             param = '{}%'.format(nombre)
-            select_query = '''select pro.* 
+            select_query = '''select distinct pro.* 
                               from proyectos pro
                               inner join usuarios_proyectos up on up.id_proyecto = pro.id
-                              where pro.nombre like %s and up.id_usuario = %s '''
+                              where pro.nombre like %s up.id_usuario = %s '''
             cursor.execute(select_query, (param, id_usuario))
             proyectos, registros = [], cursor.fetchall()
         [proyectos.append(buildProyecto(registro)) for registro in registros]
@@ -77,24 +102,27 @@ def existsByNombre(nombre):
 
 def save(proyecto):
     try:
-        with closing(get_connection()) as connection:
+        with get_connection() as connection:
             cursor = connection.cursor()
             valores = (proyecto.nombre, proyecto.descripcion, proyecto.cantidad_integrantes, proyecto.total_precio,
                        proyecto.total_horas, proyecto.lider.id)
             cursor.execute("insert into proyectos(id, nombre, descripcion, cantidad_integrantes, total_precio, total_horas, id_lider) "
                            "values(default, %s, %s, %s, %s, %s, %s)", valores)
+            #rowcount = cursor.rowcount
+            connection.close();
         return cursor.rowcount
     except (Exception, Error) as error:
         print("Error while getting data", error)
 
 def update(proyecto):
     try:
-        with closing(get_connection()) as connection:
+        with get_connection() as connection:
             cursor = connection.cursor()
             valores = (proyecto.nombre, proyecto.descripcion, proyecto.cantidad_integrantes, proyecto.total_precio,
                        proyecto.total_horas, proyecto.lider.id, proyecto.id)
             cursor.execute("update proyectos set nombre = %s, descripcion = %s, cantidad_integrantes = %s, total_precio = %s, total_horas = %s, "
                 "id_lider = %s where id = %s", valores)
+            connection.close()
         return cursor.rowcount
     except (Exception, Error) as error:
         print("Error while getting data", error)
